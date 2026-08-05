@@ -5,29 +5,33 @@ import * as patientRepository from "../repositories/patient.repository";
 import {comparePassword} from "../utils/password";
 import {generateToken} from "../utils/jwt";
 
-import {Role} from "../types/role";
 import {User} from "../types/auth";
 
 export const login = async ({
     email,
     password,
-    role,
 }: User) => {
     let user = null;
+    let userRole = null;
 
-    switch (role) {
-        case Role.ADMIN:
-            user = await adminRepository.findAdminByEmail(email);
-            break;
-        case Role.DOCTOR:
-            user = await doctorRepository.findDoctorByEmail(email);
-            break;
-        case Role.PATIENT:
+    user = await adminRepository.findAdminByEmail(email);
+
+    if (user) {
+        userRole = "ADMIN";
+    } else {
+        user = await doctorRepository.findDoctorByEmail(email);
+
+        if (user) {
+            userRole = "DOCTOR";
+        } else {
             user = await patientRepository.findPatientByEmail(email);
-            break;
-        default:
-            throw new Error("Invalid role");
+
+            if (user) {
+                userRole = "PATIENT";
+            }
+        }
     }
+
 
     if(!user) {
         throw new Error("User not found");
@@ -38,7 +42,7 @@ export const login = async ({
     if(!matched) {
         throw new Error("Invalid password");
     }
-    const token = generateToken({uid: user.id, role: user.role});
+    const token = generateToken({id: user.uid, role: userRole});
 
     return {
         token,
@@ -47,7 +51,7 @@ export const login = async ({
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            role,
+            userRole,
         },
     };
 };
