@@ -17,3 +17,26 @@ export const createDoctor = async (data: CreateDoctorInput, hashedPassword: stri
             },
         });
 }    
+
+
+export const getDoctors = async (skip: number, take: number) => {
+    return await prisma.doctor.findMany({
+        skip,
+        take,
+        select: {
+            uid: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            specialization: true,
+            experience: true,
+        },
+        orderBy: {
+            firstName: "asc",
+        },
+    });
+}
+
+export const getDoctorCount = async () => {
+  return await prisma.doctor.count();
+};

@@ -177,6 +177,98 @@ paths:
         "409":
           description: Doctor already exists
 
+  /api/doctors:
+    get:
+      summary: Get all doctors
+      description: Returns a paginated list of doctors. Authentication is required.
+      tags:
+        - Doctor
+
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number
+
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of doctors per page
+
+      responses:
+        '200':
+          description: Doctors fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Doctors fetched successfully
+                  data:
+                    type: object
+                    properties:
+                      doctors:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            uid:
+                              type: string
+                              example: "c8b4d1e2-1234-5678-90ab-abcdef123456"
+                            firstName:
+                              type: string
+                              example: John
+                            lastName:
+                              type: string
+                              example: Doe
+                            email:
+                              type: string
+                              example: john.doe@example.com
+                            specialization:
+                              type: string
+                              example: Cardiology
+                            experience:
+                              type: integer
+                              example: 8
+                      pagination:
+                        type: object
+                        properties:
+                          page:
+                            type: integer
+                            example: 1
+                          limit:
+                            type: integer
+                            example: 10
+                          total:
+                            type: integer
+                            example: 42
+                          totalPages:
+                            type: integer
+                            example: 5
+
+        '401':
+          description: Unauthorized
+
+        '500':
+          description: Internal server error
+
 components:
   securitySchemes:
     bearerAuth:

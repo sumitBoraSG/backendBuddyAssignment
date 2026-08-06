@@ -47,7 +47,7 @@ export const login = async ({
     return {
         token,
         user: {
-            uid: user.id,
+            uid: user.uid,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
