@@ -1,11 +1,11 @@
-import * as adminRepository from "../repositories/admin.repository";
-import * as doctorRepository from "../repositories/doctor.repository";
-import * as patientRepository from "../repositories/patient.repository";
+import * as adminRepository from "../repositories/admin.repository.js";
+import * as doctorRepository from "../repositories/doctor.repository.js";
+import * as patientRepository from "../repositories/patient.repository.js";
 
-import {comparePassword} from "../utils/password";
-import {generateToken} from "../utils/jwt";
+import {comparePassword} from "../utils/password.js";
+import {generateToken} from "../utils/jwt.js";
 
-import {User} from "../types/auth";
+import {User} from "../types/auth.js";
 
 export const login = async ({
     email,

@@ -1,4 +1,5 @@
-import prisma  from "../config/prisma";
+import prisma  from "../config/prisma.js";
+
 
 export const findAdminByEmail = async (email: string) => {
     return prisma.admin.findUnique({
@@ -7,3 +8,5 @@ export const findAdminByEmail = async (email: string) => {
         },
     });
 }
+
+
