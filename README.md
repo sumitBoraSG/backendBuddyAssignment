@@ -40,9 +40,6 @@ The project follows a clean **Controller → Service → Repository** architectu
 * Book appointments
 * View booked appointments
 
-### Doctor
-
-* View appointments assigned to them (future implementation)
 
 ### Public
 
