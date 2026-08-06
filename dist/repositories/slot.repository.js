@@ -1,15 +1,15 @@
 import prisma from "../config/prisma.js";
 import { AppointmentStatus } from '@prisma/client';
-
-
-export const getBookedAppointments = async (doctorId : string, appointmentDate: Date) => {
-
-
+export const getBookedAppointments = async (doctorId, appointmentDate) => {
+    const startOfDay = appointmentDate;
+    const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000);
     return prisma.appointment.findMany({
-
         where: {
             doctorId,
-            appointmentDate: appointmentDate,
+            appointmentDate: {
+                gte: startOfDay,
+                lt: endOfDay,
+            },
             status: {
                 not: AppointmentStatus.CANCELLED,
             },
@@ -18,37 +18,25 @@ export const getBookedAppointments = async (doctorId : string, appointmentDate: 
             appointmentTime: true,
         }
     });
-   
-
-
-
-}
-
-export const findBookedAppointment = async (
-    doctorId: string,
-    appointmentDate: Date,
-    appointmentTime: string
-) => {
+};
+export const findBookedAppointment = async (doctorId, appointmentDate, appointmentTime) => {
+    const startOfDay = appointmentDate;
+    const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000);
     return prisma.appointment.findFirst({
         where: {
             doctorId,
-            appointmentDate,
+            appointmentDate: {
+                gte: startOfDay,
+                lt: endOfDay,
+            },
             appointmentTime,
             status: {
                 not: AppointmentStatus.CANCELLED,
             },
-
         },
-    })
-}
-
-export const createAppointment = async ( data: {
-    doctorId: string;
-    patientId: string;
-    appointmentDate: Date;
-    appointmentTime: string;
-    status: AppointmentStatus;
-}) => {
+    });
+};
+export const createAppointment = async (data) => {
     return prisma.appointment.create({
         data,
         select: {
@@ -72,11 +60,9 @@ export const createAppointment = async ( data: {
                 },
             },
         }
-    })
-}
-
-
-export const getAppointmentsByPatientId = async (patientId: string) => {
+    });
+};
+export const getAppointmentsByPatientId = async (patientId) => {
     return prisma.appointment.findMany({
         where: {
             patientId,
@@ -96,6 +82,6 @@ export const getAppointmentsByPatientId = async (patientId: string) => {
         orderBy: {
             appointmentDate: "asc",
         },
-
     });
-}
+};
+//# sourceMappingURL=slot.repository.js.map

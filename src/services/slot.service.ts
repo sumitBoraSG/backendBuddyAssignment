@@ -16,15 +16,15 @@ const ALL_SLOTS = [
 export const getAvailableSlots = async (doctorId: string, date: string) => {
     const targetDate = new Date(date);
     targetDate.setHours(0, 0, 0, 0);
+    targetDate.setDate(targetDate.getDate() + 1);
+
     const bookedAppointments = await slotRepository.getBookedAppointments(
         doctorId,
         targetDate
     );
-
     const bookedSlots = bookedAppointments.map(
         appointment => appointment.appointmentTime
     )
-
     const availableSlots = ALL_SLOTS.filter(
         slot => !bookedSlots.includes(slot)
     );
@@ -42,6 +42,7 @@ export const createAppointment = async (
 ) => {
     const appointmentDate = new Date(data.appointmentDate);
     appointmentDate.setHours(0, 0, 0, 0);
+    appointmentDate.setDate(appointmentDate.getDate() + 1);
 
     const doctor = await doctorRepository.findDoctorById(data.doctorId);
 
