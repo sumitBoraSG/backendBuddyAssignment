@@ -8,6 +8,19 @@ export const findPatientByEmail = async (email: string) => {
     });
 };
 
+export const findPatientById = async (patientId: string) => {
+    return prisma.patient.findUnique({
+        where: {
+            uid: patientId,
+        },
+        select: {
+            uid: true,
+            firstName: true,
+            lastName: true,        
+        },
+    });
+}
+
 export const createPatient = (data: createPatientInput, hashedPassword: string) => {
     return prisma.patient.create({
             data: {

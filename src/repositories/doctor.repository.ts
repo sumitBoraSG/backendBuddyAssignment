@@ -7,6 +7,19 @@ export const findDoctorByEmail = async (email: string) => {
         },
     });
 }
+export const findDoctorById = async (doctorId: string) => {
+    return prisma.doctor.findUnique({
+        where: {
+            uid: doctorId,
+        },
+        select: {
+            uid: true,
+            firstName: true,
+            lastName: true,
+            specialization: true,
+        },
+    });
+}
 
 
 export const createDoctor = async (data: CreateDoctorInput, hashedPassword: string) => {
