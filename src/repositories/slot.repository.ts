@@ -67,3 +67,28 @@ export const createAppointment = async ( data: {
         }
     })
 }
+
+
+export const getAppointmentsByPatientId = async (patientId: string) => {
+    return prisma.appointment.findMany({
+        where: {
+            patientId,
+        },
+        include: {
+            doctor: {
+                select: {
+                    uid: true,
+                    firstName: true,
+                    lastName: true,
+                    specialization: true,
+                    experience: true,
+                    email: true,
+                },
+            },
+        },
+        orderBy: {
+            appointmentDate: "asc",
+        },
+
+    });
+}

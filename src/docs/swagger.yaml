@@ -328,6 +328,65 @@ paths:
           description: Internal server error
 
   /api/appointments:
+    get:
+      summary: Get patient appointments
+      description: Retrieves all booked appointments for the authenticated patient. Authentication is required.
+      tags:
+        - Appointment
+
+      security:
+        - bearerAuth: []
+
+      responses:
+        '200':
+          description: Appointments fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        uid:
+                          type: string
+                          example: "c8b4d1e2-1234-5678-90ab-abcdef123456"
+                        appointmentDate:
+                          type: string
+                          format: date
+                          example: "2026-08-06"
+                        appointmentTime:
+                          type: string
+                          example: "09:00"
+                        status:
+                          type: string
+                          example: "BOOKED"
+                        doctor:
+                          type: object
+                          properties:
+                            uid:
+                              type: string
+                            firstName:
+                              type: string
+                            lastName:
+                              type: string
+                            specialization:
+                              type: string
+
+        '401':
+          description: Unauthorized
+
+        '403':
+          description: Forbidden
+
+        '500':
+          description: Internal server error
+
     post:
       summary: Create an appointment
       description: Creates an appointment for a doctor. Authentication is required.

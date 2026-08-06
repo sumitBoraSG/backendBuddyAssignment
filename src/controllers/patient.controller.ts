@@ -67,3 +67,26 @@ export const createAppointment = async (
     });
   }
 }
+
+export const getPatientAppointments = async (
+    req: AuthRequest,
+    res: Response
+) => {
+    try {
+        const patientId = req.user!.id;
+
+        const appointments = await slotService.getPatientAppointments(patientId);
+
+        return res.status(200).json({
+            success: true,
+            message: "Appointments fetched successfully.",
+            data: appointments,
+        });
+    } catch (error) {
+        return res.status(500).json({
+        success: false,
+        message: "Failed to fetch appointments.",
+    });
+  }
+
+}

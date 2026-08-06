@@ -78,3 +78,8 @@ export const createAppointment = async (
 
 
 }
+
+
+export const getPatientAppointments = async (patientId: string) => {
+  return slotRepository.getAppointmentsByPatientId(patientId);
+};

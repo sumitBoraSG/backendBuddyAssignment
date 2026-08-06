@@ -9,5 +9,5 @@ const router = Router();
 router.get("/doctors", authenticate, patientController.getDoctors);
 router.get("/slots/:doctorId", authenticate, patientController.getAvailableSlots);
 router.post("/appointments", authenticate, authorize("PATIENT"), patientController.createAppointment);
-
+router.get("/appointments", authenticate, authorize("PATIENT"), patientController.getPatientAppointments)
 export default router;
