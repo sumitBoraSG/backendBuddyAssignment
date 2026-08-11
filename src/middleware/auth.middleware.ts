@@ -32,7 +32,6 @@ export const authenticate = (
                 role: string;
         };
         req.user = decoded;
-        console.log(req.user)
         next();
     } catch {
         return res.status(401).json(

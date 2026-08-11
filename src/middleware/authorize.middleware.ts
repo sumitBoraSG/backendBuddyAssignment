@@ -7,7 +7,6 @@ export const authorize = (...roles: string[]) => (req: AuthRequest, res: Respons
             message: "Unauthorized",
         })
     }
-    console.log(req.user)
     if(!roles.includes(req.user.role)) {
         console.log(req.user.role)
         return res.status(403).json({
