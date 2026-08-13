@@ -8,56 +8,105 @@ datasource db {
 
 }
 
+model users {
+  id                Int               @id @default(autoincrement())
+  first_name        String            @db.VarChar(50)
+  last_name         String            @db.VarChar(50)
+  email             String            @unique @db.VarChar(255)
+  password_hash     String            @db.VarChar(255)
+  role              Role
+  created_by        Int?
+  updated_by        Int?
+  created_at        DateTime          @default(now())
+  updated_at        DateTime          @updatedAt
+  deleted_at        DateTime?
 
-model Admin {
-  uid        String @id @default(uuid())
-  firstName  String
-  lastName   String
-  email      String @unique
-  password   String
+  patient           patients?
+  doctor            doctors?
 }
 
-model Patient {
-  uid         String @id @default(uuid())
-  firstName   String
-  lastName    String
-  email       String @unique
-  password    String
-  dob         DateTime
-  height      Int
-  weight      Int
-  bloodGroup  String
+model patients {
+  patient_id       Int                    @id
+  height_cm        Int?
+  weight_kg        Int?
+  blood_group      BloodGroup?
+  dob              DateTime?              @db.Date
 
-  appointments Appointment[]
+  user             users                  @relation(fields: [patient_id], references: [id])
+  appointments     appointments[]
+
 }
 
-model Doctor {
-  uid             String @id @default(uuid())
-  firstName       String
-  lastName        String
-  email           String @unique
-  password        String
-  experience      Int
-  specialization  String
+model doctors {
+  doctor_id         Int                   @id
+  specialization_id Int
+  experience_years  Int
 
-  appointments Appointment[]
+  user              users                 @relation(fields: [doctor_id], references: [id])
+  specialization    specializations       @relation(fields: [specialization_id], references: [id])
+  appointments      appointments[]
+  availabilities    doctor_availabilities[]
+}
+
+model specializations {
+  id          Int                         @id @default(autoincrement())
+  name        String                      @unique @db.VarChar(100)
+  description String?                     @db.VarChar(500)
+  is_active   Boolean                     @default(true)
+  created_at  DateTime                    @default(now())
+  updated_at  DateTime                    @updatedAt
+
+  doctors     doctors[]
 }
 
 
-model Appointment {
-  uid              String @id @default(uuid())
-  appointmentDate  DateTime
-  appointmentTime  String
-  status           AppointmentStatus
+model appointments {
+  id                     Int               @id @default(autoincrement())
+  patient_id             Int
+  doctor_id              Int
+  status                 AppointmentStatus
+  appointment_start_time DateTime
+  appointment_end_time   DateTime
+  created_at             DateTime          @default(now())
+  updated_at             DateTime          @updatedAt
 
-  patientId String
-  doctorId  String
-
-  patient Patient @relation(fields: [patientId], references: [uid])
-  doctor Doctor @relation(fields: [doctorId], references: [uid])
+  patient                patients          @relation(fields: [patient_id], references: [patient_id])
+  doctor                 doctors           @relation(fields: [doctor_id], references: [doctor_id])
 }
+
+model doctor_availabilities {
+  id                      Int               @id @default(autoincrement())
+  doctor_id               Int
+  availability_start_time DateTime
+  availability_end_time   DateTime
+  created_at              DateTime          @default(now())
+  updated_at              DateTime          @updatedAt
+
+  doctor                  doctors           @relation(fields: [doctor_id], references: [doctor_id])
+}
+
+
 
 enum AppointmentStatus {
-  BOOKED 
+  CONFIRMED
   CANCELLED
+  COMPLETED
+  PENDING
+}
+
+enum Role {
+  ADMIN
+  PATIENT
+  DOCTOR
+}
+
+enum BloodGroup {
+  O_POSITIVE  @map("O+")
+  O_NEGATIVE  @map("O-")
+  A_POSITIVE  @map("A+")
+  A_NEGATIVE  @map("A-")
+  B_POSITIVE  @map("B+")
+  B_NEGATIVE  @map("B-")
+  AB_POSITIVE @map("AB+")
+  AB_NEGATIVE @map("AB-")
 }
