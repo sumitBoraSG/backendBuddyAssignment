@@ -1,49 +1,16 @@
 {
-  "name": "backendbuddyassignment",
+  "name": "doctor-appointment-system",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Doctor Appointment Booking System with React TypeScript Frontend and Express Node.js Backend",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "test:backend": "npm --prefix backend test",
+    "build:backend": "npm --prefix backend run build",
+    "build:frontend": "npm --prefix frontend run build",
+    "build": "npm run build:backend && npm run build:frontend"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "type": "module",
-  "dependencies": {
-    "@prisma/client": "^6.19.3",
-    "bcrypt": "^6.0.0",
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "drizzle-orm": "^0.45.2",
-    "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3",
-    "pg": "^8.23.0",
-    "prisma": "^6.19.3",
-    "swagger-jsdoc": "^6.3.0",
-    "swagger-ui-express": "^5.0.1",
-    "ws": "^8.21.3",
-    "yamljs": "^0.3.0",
-    "zod": "^4.4.3"
-  },
-  "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^26.1.2",
-    "@types/swagger-ui-express": "^4.1.8",
-    "@types/ws": "^8.18.1",
-    "@types/yamljs": "^0.2.34",
-    "drizzle-kit": "^0.31.10",
-    "nodemon": "^3.1.14",
-    "tsx": "^4.23.5",
-    "typescript": "^7.0.2"
-  }
+  "license": "ISC"
 }
